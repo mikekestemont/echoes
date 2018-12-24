@@ -1,4 +1,5 @@
 import configparser
+import os.path
 
 from gensim.models import FastText, Word2Vec
 from gensim.similarities.index import AnnoyIndexer
@@ -8,18 +9,16 @@ from flask import request, jsonify
 
 
 config = configparser.ConfigParser()
-config.read('/home/mikekestemont/echoes/echoes_server.config')
-#config.read('echoes.config')
+config.read('echoes_server.config')
 
-ft_model = FastText.load(f"{config.get('word', 'model_dir')}/ft_model")
-w2v_model = Word2Vec.load(f"{config.get('word', 'model_dir')}/w2v_model")
+ft_model = FastText.load(os.path.join(config.get('word', 'model_dir'), 'ft_model'))
+w2v_model = Word2Vec.load(os.path.join(config.get('word', 'model_dir'), 'w2v_model'))
 
 annoy_index = AnnoyIndexer()
-annoy_index.load(f"{config.get('word', 'model_dir')}/annoy_model")
+annoy_index.load(os.path.join(config.get('word', 'model_dir'), 'annoy_model'))
 annoy_index.model = w2v_model
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
