@@ -37,7 +37,8 @@ def neighbors(topn=10):
     if 'w' in request.args and request.args['w'].strip():
         w = request.args['w'].strip()
     else:
-        return 'Error: No w-field provided. Please specify a non-empty word.'
+        e = 'Error: No w-field provided. Please specify a non-empty word.'
+        return jsonify({'status': 'fail', 'message': str(e), 'code': 500})
         
     topn = int(request.args.get('topn', topn))
 
@@ -49,7 +50,7 @@ def neighbors(topn=10):
             neighbors = ft_model.most_similar(w, topn=topn)
         except KeyError:
             # no relevant ngrams at all:
-            neighbors = None
-    
-    neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
-    return jsonify(neighbors)
+            neighbors = []
+    if neighbors:
+        neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
+    return jsonify({'status': 'OK': 'results': neighbors})
