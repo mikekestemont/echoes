@@ -215,5 +215,5 @@ function translateText(text) {
   var response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
   var json = response.getContentText();
   var data = JSON.parse(json);
-  return data[0].word;
+  return data['results'][0].word;
 }
