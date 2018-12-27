@@ -12,9 +12,9 @@ class SemanticNeighbors:
             self.w2v_model = Word2Vec.load(os.path.join(model_dir, 'w2v_model'))
         if os.path.exists(os.path.join(model_dir, 'annoy_model')):
             self.annoy_index = AnnoyIndexer()
-            self.annoy_index.load(os.path.join(model_dir), 'annoy_model')
+            self.annoy_index.load(os.path.join(model_dir, 'annoy_model'))
 
-    def query(self, query, topn):
+    def query(self, w, topn):
         if w in self.w2v_model:
             vector = self.w2v_model[w]
             neighbors = self.w2v_model.most_similar(
