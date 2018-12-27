@@ -1,32 +1,19 @@
 import configparser
 import os
-
 import tqdm
-import whoosh.index
-import whoosh.fields
-from whoosh.fields import TEXT, ID
-from whoosh.analysis import SimpleAnalyzer
 
+from api import app, db, models, search
 
-schema = whoosh.fields.Schema(
-    path=ID(stored=True),
-    text=TEXT(analyzer=SimpleAnalyzer(), phrase=True)
-)
+db.create_all()
 
-config = configparser.ConfigParser()
-config.read('echoes.config')
-index_dir = config.get('concordance', 'indexdir')
-input_dir = config.get('general', 'input_dir')
-
-if not os.path.exists(index_dir):
-    os.mkdir(index_dir)
-    whoosh.index.create_in(index_dir, schema)
-
-ix = whoosh.index.open_dir(index_dir)
-writer = ix.writer(limitmb=1024)
-n_files = len(os.listdir(input_dir))
-for entry in tqdm.tqdm(os.scandir(input_dir), total=n_files):
+n_files = len(os.listdir(app.config['CORPUS_DIR']))
+for entry in tqdm.tqdm(os.scandir(app.config['CORPUS_DIR']), total=n_files,
+                       desc='Adding documents to database'):
     if entry.path.endswith('.txt'):
         with open(entry.path) as f:
-            writer.add_document(path=entry.path, text=f.read())
-writer.commit()
+            text = models.Text(source="Unknown", author="Anonymous", text=f.read())
+            db.session.add(text)
+db.session.commit()
+
+for text in tqdm.tqdm(models.Text.query.all(), desc='Indexing with Elasticsearch'):
+    search.index_document('echoes-texts', text)
