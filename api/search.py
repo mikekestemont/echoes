@@ -1,4 +1,10 @@
+import unidecode
+
 from api import app
+
+
+def cleanup_snippet(snippet):
+    return ' '.join(unidecode.unidecode(snippet).split())
 
 
 def index_document(index, model):
@@ -14,4 +20,5 @@ def query_index(index, query):
               'highlight': {'fields': {'text': {}}}})
     ids, snippets = zip(*[(int(hit['_id']), hit['highlight']['text'])
                           for hit in search['hits']['hits']])
+    snippets = [[cleanup_snippet(s) for s in snippet] for snippet in snippets]
     return ids, snippets, search['hits']['total']
