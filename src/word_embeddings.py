@@ -3,6 +3,7 @@ import configparser
 import glob
 import os
 import shutil
+import json
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -12,14 +13,14 @@ from gensim.similarities.index import AnnoyIndexer
 
 
 class Sentences:
-    def __init__(self, input_dir):
-        self.input_dir = input_dir
+    def __init__(self, input_file):
+        self.input_file = input_file
     
     def __iter__(self):
-        for fn in list(glob.glob(f'{self.input_dir}/*.txt')):
-            with open(fn) as f:
-                for line in f:
-                    yield line.strip().lower().split()
+        with open(self.input_file) as f:
+            for line in f:
+                for sentence in json.loads(line)['sentences']:
+                    yield [t.lower() for t in sentence['tokens']]
 
 
 def main():
@@ -32,12 +33,16 @@ def main():
     config = configparser.ConfigParser()
     config.read(args.config_file)
 
-    sentences = Sentences(input_dir=config['general']['input_dir'])
+    print(config['word']['model_dir'])
+
+    sentences = Sentences(input_file=config['general']['corpus_file'])
     try:
         shutil.rmtree(config['word']['model_dir'])
     except FileNotFoundError:
         pass
     os.mkdir(config['word']['model_dir'])
+
+    
 
     logging.info('Building fasttext model...')
     model = FastText(sentences,
