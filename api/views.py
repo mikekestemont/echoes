@@ -1,18 +1,19 @@
 from flask import request, jsonify
 
 from .search import query_index
+from .models import Text
 
 from api import app
 
 
 @app.route('/api/word', methods=['GET'])
-def neighbors(topn=10):
+def neighbors(limit=10):
     """
     locally:
-    http://127.0.0.1:5000/api/word?w=kat&topn=4
+    http://127.0.0.1:5000/api/word?w=kat&limit=4
 
     server:
-    http://mikekestemont.pythonanywhere.com/api/word?w=kat&topn=4
+    http://mikekestemont.pythonanywhere.com/api/word?w=kat&limit=4
     """
 
     if 'w' in request.args and request.args['w'].strip():
@@ -21,8 +22,8 @@ def neighbors(topn=10):
         e = 'Error: No w-field provided. Please specify a non-empty word.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
         
-    topn = int(request.args.get('topn', topn))
-    neighbors = app.semantic_neighbors.query(w, topn)
+    limit = int(request.args.get('limit', limit))
+    neighbors = app.semantic_neighbors.query(w, limit)
     if neighbors:
         neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
     return jsonify({'status': 'OK', 'results': neighbors})
@@ -40,3 +41,11 @@ def concordance(limit=5):
 
     hits, snippets, total = query_index('echoes-texts', w, limit=limit)
     return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
+
+
+@app.route('/api/sentence', methods=['GET'])
+def sentence():
+    document_id = int(request.args['did'])
+    sentence_id = int(request.args['sid'])
+    sentence = Text.query.get(document_id)
+    return jsonify({'sentence': sentence.get(sentence_id)})

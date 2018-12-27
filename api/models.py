@@ -1,4 +1,21 @@
 from api import app, db
+import json
+
+
+class JSONEncodedDict(db.TypeDecorator):
+    "Represents an immutable structure as a json-encoded string."
+
+    impl = db.VARCHAR
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            value = json.dumps(value)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            value = json.loads(value)
+        return value
 
 
 class Text(db.Model):
@@ -7,7 +24,7 @@ class Text(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     source = db.Column(db.String())
     author = db.Column(db.String())
-    text = db.Column(db.String())
+    text = db.Column(JSONEncodedDict)
 
-    def get_sentence(self, i):
-        return self.text.split('\n')[i]
+    def get(self, i):
+        return self.text[i]
