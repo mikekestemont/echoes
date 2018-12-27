@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     # data and models paths
-    MODEL_DIR = os.path.join(basedir, 'data/word_models')
+    MODEL_DIR = os.path.join(basedir, '../data/word_models')
     CORPUS_DIR = os.path.join(basedir, '../data/corpus')
 
     CORPUS_FILE = os.path.join(basedir, '../data/corpus.jsonl')
