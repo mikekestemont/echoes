@@ -38,7 +38,7 @@ class Sentences:
         for fn in list(glob.glob(f'{self.tmp_dir}/*.txt')):
             with open(fn) as f:
                 for line in f:
-                    yield line.strip().split()
+                    yield line.strip().lower().split()
 
 
 def main():
