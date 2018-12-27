@@ -20,9 +20,16 @@ def index_document(index, model):
 def query_index(index, query, limit=5):
     search = app.elasticsearch.search(
         index=index, doc_type=index,
-        body={"from" : 0, "size" : limit,
-              'query': {'match': {'text': query}},
-              'highlight': {'fields': {'text': {}}}})
+        body={
+            "from" : 0, "size" : limit,
+            'query': {'match': {'text': query}},
+            'highlight': {
+                'fields': {
+                    'text': {
+                        "fragment_size": app.config['FRAGMENT_SIZE'],
+                        "number_of_fragments": app.config['NUMBER_OF_FRAGMENTS']
+                    }}}
+        })
     ids, snippets = [], []
     if search['hits']['hits']:
         ids, snippets = zip(*[(int(hit['_id']), hit['highlight']['text'])
