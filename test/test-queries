@@ -1,0 +1,10 @@
+# -*- restclient -*-
+
+# GET a response from the concordance indexer
+GET http://127.0.0.1:5000/api/concordance?w=snel&limit=5
+
+# GET a response from the neighbor similarity search indexer
+GET http://127.0.0.1:5000/api/word?w=vreemd&limit=5
+
+# GET a specific sentence from a document
+GET http://127.0.0.1:5000/api/sentence?did=7&sid=20
