@@ -29,15 +29,14 @@ def neighbors(topn=10):
 
 
 @app.route('/api/concordance', methods=['GET'])
-def concordance(limit=20):
+def concordance(limit=5):
     if 'w' in request.args and request.args['w'].strip():
         w = request.args['w'].strip()
     else:
         e = 'Error: No w-field provided. Please specify a non-empty word.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
 
-    topn = int(request.args.get('topn', limit))
+    limit = int(request.args.get('limit', limit))
 
-    json_out = []
-    hits, snippets, total = query_index('echoes-texts', w)
+    hits, snippets, total = query_index('echoes-texts', w, limit=limit)
     return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
