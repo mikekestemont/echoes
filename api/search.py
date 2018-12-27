@@ -10,6 +10,8 @@ def index_document(index, model):
 def query_index(index, query):
     search = app.elasticsearch.search(
         index=index, doc_type=index,
-        body={'query': {'multi_match': {'query': query, 'fields': ['*']}}})
-    ids = [int(hit['_id']) for hit in search['hits']['hits']]
-    return ids, search['hits']['total']
+        body={'query': {'multi_match': {'query': query, 'fields': ['*']}},
+              'highlight': {'fields': {'text': {}}}})
+    ids, snippets = zip(*[(int(hit['_id']), hit['highlight']['text'])
+                          for hit in search['hits']['hits']])
+    return ids, snippets, search['hits']['total']

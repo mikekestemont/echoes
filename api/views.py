@@ -39,5 +39,5 @@ def concordance(limit=20):
     topn = int(request.args.get('topn', limit))
 
     json_out = []
-    hits, total = query_index('echoes-texts', w)
-    return jsonify({'hits': hits, 'total': total})
+    hits, snippets, total = query_index('echoes-texts', w)
+    return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
