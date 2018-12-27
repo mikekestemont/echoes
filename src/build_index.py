@@ -7,6 +7,7 @@ import tqdm
 
 from api import app, db, models, search
 
+
 def main():
     db.create_all()
 
@@ -25,6 +26,8 @@ def main():
     db.session.commit()
 
     logging.info(f"Adding files to elasticsearch")
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.WARNING)
+
     for text in tqdm.tqdm(models.Text.query.all(), desc='Indexing with Elasticsearch'):
         search.index_document('echoes-texts', text)
     logging.info(f'Done indexing files')
