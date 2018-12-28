@@ -20,7 +20,7 @@ class JSONEncodedDict(db.TypeDecorator):
 
 class Text(db.Model):
     __searchable__ = ['text']
-    
+
     id = db.Column(db.Integer, primary_key=True)
     source = db.Column(db.String())
     author = db.Column(db.String())

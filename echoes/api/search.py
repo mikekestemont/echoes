@@ -21,7 +21,7 @@ def query_index(index, query, limit=5):
     search = app.elasticsearch.search(
         index=index, doc_type=index,
         body={
-            "from" : 0, "size" : limit,
+            "from": 0, "size": limit,
             'query': {'match': {'text': query}},
             'highlight': {
                 'fields': {

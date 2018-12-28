@@ -21,7 +21,7 @@ def word_neighbors(limit=10):
     else:
         e = 'Error: No w-field provided. Please specify a non-empty word.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
-        
+
     limit = int(request.args.get('limit', limit))
     neighbors = app.semantic_neighbors.query(w, limit)
     if neighbors:
@@ -36,7 +36,7 @@ def phrase_neighbors(limit=10):
     else:
         e = 'Error: No s-field provided. Please specify a non-empty phrase.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
-        
+
     limit = int(request.args.get('limit', limit))
     neighbors = app.sentence_neighbors.query(s, limit)
     if neighbors:
