@@ -15,6 +15,8 @@ train:
 	@python echoes/word_embeddings.py
 
 index:
+	@if ! (curl -s http://localhost:9200/ | grep "elasticsearch" > /dev/null); \
+	then (echo "Elastic search needs to be running on port 9200"; exit 1); fi;
 	echo "Preprocessing corpus..."
 	@python echoes/preprocess_corpus.py
 	echo "Building SQLite index and filling elasticsearch index..."
