@@ -42,8 +42,6 @@ def main():
         pass
     os.mkdir(config['word']['model_dir'])
 
-    
-
     logging.info('Building fasttext model...')
     model = FastText(sentences,
                      size=int(config['word']['size']),

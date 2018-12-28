@@ -31,7 +31,7 @@ def main():
     max_files = int(config['general']['max_files'])
 
     fns = glob.glob(f'{orig_dir}/*.txt')
-    if max_files:
+    if max_files > -1:
         fns = list(fns)[:max_files]
     
     metadata = pd.read_excel(config['general']['metadata'])
