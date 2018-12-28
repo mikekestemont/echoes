@@ -1,4 +1,4 @@
-all: clean install build train
+all: clean install index train
 
 clean:
 	echo "Cleaning up db and index..."
