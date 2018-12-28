@@ -6,7 +6,7 @@ import flask_sqlalchemy
 
 from .neighbors import SemanticNeighbors
 
-import config
+import echoes.config as config
 
 
 app = flask.Flask(__name__)
