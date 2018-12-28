@@ -3,6 +3,8 @@ elasticsearch==6.3.1
 flask==1.0.2
 flask-sqlalchemy==2.3.2
 gensim==3.6.0
+pandas==0.23.4
 sqlalchemy==1.2.15
 syntok==1.0.2
 unidecode==1.0.23
+xlrd==1.2.0
