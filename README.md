@@ -22,4 +22,4 @@ make
 Other make options are:
 1. `make clean`: to clear out the database and elasticsearch index;
 2. `make install`: to install all Python dependencies;
-3. `make build`: to build te databases, indexes, and embedding files
+3. `make index`: to build the databases, indexes, and embedding files
