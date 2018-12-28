@@ -17,9 +17,9 @@ parser.add_argument('--config_file', type=str,
                     default='configs/echoes_local.config',
                     help='location of the configuration file')
 args = parser.parse_args()
-config = configparser.ConfigParser()
-config.read(args.config_file)
-elmo = Embedder(config['sentence']['elmo_model'])
+config_ = configparser.ConfigParser()
+config_.read(args.config_file)
+elmo = Embedder(config_['sentence']['elmo_model'])
 
 import faiss
 faiss_db = faiss.IndexFlatL2(1024)
@@ -50,9 +50,9 @@ with open(app.config['CORPUS_FILE']) as f:
         assert faiss_db.ntotal == len(faiss_lookup)
 
 db.session.commit()
-faiss.write_index(faiss_db, config['sentence']['faiss_db'])
+faiss.write_index(faiss_db, config_['sentence']['faiss_db'])
 
-with open(config['sentence']['faiss_lookup'], 'w') as f:
+with open(config_['sentence']['faiss_lookup'], 'w') as f:
     f.write(json.dumps(faiss_lookup, indent=4))
 
 logging.info(f"Adding files to elasticsearch")

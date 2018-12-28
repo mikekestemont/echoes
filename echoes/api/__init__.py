@@ -4,7 +4,8 @@ from elasticsearch import Elasticsearch
 import flask
 import flask_sqlalchemy
 
-from .neighbors import SemanticNeighbors
+from .neighbors import WordNeighbors
+from .neighbors import PhraseNeighbors
 
 import config
 
@@ -15,6 +16,10 @@ app.config.from_object(config.Config)
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']])
-app.semantic_neighbors = SemanticNeighbors(app.config['MODEL_DIR'])
+app.semantic_neighbors = WordNeighbors(app.config['MODEL_DIR'])
+
+
+if os.path.exists(os.path.join(app.config['MODEL_DIR'], 'faiss_db')):
+    app.sentence_neighbors = PhraseNeighbors(app.config['MODEL_DIR'])
 
 from . import views, models, search
