@@ -28,6 +28,7 @@ def word_neighbors(limit=10):
         neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
     return jsonify({'status': 'OK', 'results': neighbors})
 
+
 @app.route('/api/phrase', methods=['GET'])
 def phrase_neighbors(limit=10):
     if 's' in request.args and request.args['s'].strip():
@@ -39,7 +40,13 @@ def phrase_neighbors(limit=10):
     limit = int(request.args.get('limit', limit))
     neighbors = app.sentence_neighbors.query(s, limit)
     if neighbors:
-        neighbors = [{'sentence': s, 'sim': d} for s, d in neighbors]
+        neighbors = [
+            {
+                'sentence': Text.query.get(doc_id + 1).get(sent_id),
+                'distance': str(dist)
+            }
+            for (doc_id, sent_id), dist in neighbors
+        ]
     return jsonify({'status': 'OK', 'results': neighbors})
 
 

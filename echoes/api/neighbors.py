@@ -41,10 +41,10 @@ class PhraseNeighbors:
         self.elmo = Embedder(os.path.join(model_dir, 'elmo_nl'))
         
     def query(self, s, topn):
-        s = [tokenizer.tokenize(s)]
-        X = self.elmo.sents2elmo(s)
+        s = [w.value for w in tokenizer.tokenize(s)]
+        X = self.elmo.sents2elmo([s])
         X = np.array([x.mean(axis=0) for x in X])    
 
         distances, indices = self.faiss_db.search(X, k=topn)
 
-        return [(self.faiss_lookup[i], d) for i, d in zip(indices, distances)]
+        return [(self.faiss_lookup[i], d) for i, d in zip(indices[0], distances[0])]

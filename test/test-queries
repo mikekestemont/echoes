@@ -8,3 +8,6 @@ GET http://127.0.0.1:5000/api/word?w=vreemd&limit=5
 
 # GET a specific sentence from a document
 GET http://127.0.0.1:5000/api/sentence?did=7&sid=20
+
+# GET as phrase neighbor
+GET http://127.0.0.1:5000/api/phrase?s=een ongehoord verhaal
