@@ -14,7 +14,7 @@ train:
 	echo "Constructing word embeddings..."
 	@python echoes/word_embeddings.py
 
-build:
+index:
 	echo "Preprocessing corpus..."
 	@python echoes/preprocess_corpus.py
 	echo "Building SQLite index and filling elasticsearch index..."
