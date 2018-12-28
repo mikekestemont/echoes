@@ -7,7 +7,7 @@ from . import app
 
 
 @app.route('/api/word', methods=['GET'])
-def neighbors(limit=10):
+def word_neighbors(limit=10):
     """
     locally:
     http://127.0.0.1:5000/api/word?w=kat&limit=4
@@ -26,6 +26,20 @@ def neighbors(limit=10):
     neighbors = app.semantic_neighbors.query(w, limit)
     if neighbors:
         neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
+    return jsonify({'status': 'OK', 'results': neighbors})
+
+@app.route('/api/phrase', methods=['GET'])
+def phrase_neighbors(limit=10):
+    if 's' in request.args and request.args['s'].strip():
+        s = request.args['s'].strip()
+    else:
+        e = 'Error: No s-field provided. Please specify a non-empty phrase.'
+        return jsonify({'status': 'fail', 'message': e, 'code': 500})
+        
+    limit = int(request.args.get('limit', limit))
+    neighbors = app.sentence_neighbors.query(s, limit)
+    if neighbors:
+        neighbors = [{'sentence': s, 'sim': d} for s, d in neighbors]
     return jsonify({'status': 'OK', 'results': neighbors})
 
 
