@@ -1,9 +1,7 @@
 # Echoes
 
-Intro text
-
-![Echo by Alexandre Cabanel. Painted in 1874 the piece now hangs in the Metropolitan
-Museum of Art, New York.](images/Echo.jpg =250x)
+Some introductory sentences about the project, its main purpose and history. 
+<img src="images/Echo.jpg" align="right" height="250" />
 
 ## Installation
 
