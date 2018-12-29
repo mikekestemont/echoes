@@ -3,6 +3,7 @@ import os
 from elasticsearch import Elasticsearch
 import flask
 import flask_sqlalchemy
+from flasgger import Swagger
 
 from .neighbors import WordNeighbors
 from .neighbors import PhraseNeighbors
@@ -12,6 +13,7 @@ import config
 
 app = flask.Flask(__name__)
 app.config.from_object(config.Config)
+swagger = Swagger(app)
 
 db = flask_sqlalchemy.SQLAlchemy(app)
 

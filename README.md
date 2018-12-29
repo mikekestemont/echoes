@@ -23,3 +23,14 @@ Other make options are:
 1. `make clean`: to clear out the database and elasticsearch index;
 2. `make install`: to install all Python dependencies;
 3. `make index`: to build the databases, indexes, and embedding files
+
+## Test API
+
+Run the app with
+
+```
+cd `echoes/echoes`
+python localrun.py
+```
+
+Direct your browser to http://localhost:5000/apidocs/ to test the API and services.

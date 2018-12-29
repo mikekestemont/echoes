@@ -7,23 +7,27 @@ from . import app
 
 
 @app.route('/api/word', methods=['GET'])
-def word_neighbors(limit=10):
+def word_neighbors():
+    """Retrieve a list of synonyms for the given word.
+    ---
+    parameters:
+      - name: q
+        in: query
+        type: string
+        required: true
+    responses:
+      200:
+        description: A list of neighboring words
     """
-    locally:
-    http://127.0.0.1:5000/api/word?w=kat&limit=4
 
-    server:
-    http://mikekestemont.pythonanywhere.com/api/word?w=kat&limit=4
-    """
-
-    if 'w' in request.args and request.args['w'].strip():
-        w = request.args['w'].strip()
+    if 'q' in request.args and request.args['q'].strip():
+        query = request.args['q'].strip()
     else:
-        e = 'Error: No w-field provided. Please specify a non-empty word.'
+        e = 'Error: No q-field provided. Please specify a non-empty word.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
 
-    limit = int(request.args.get('limit', limit))
-    neighbors = app.semantic_neighbors.query(w, limit)
+    limit = int(request.args.get('limit', 10))
+    neighbors = app.semantic_neighbors.query(query, limit)
     if neighbors:
         neighbors = [{'word': w, 'sim': d} for w, d in neighbors]
     return jsonify({'status': 'OK', 'results': neighbors})
@@ -31,14 +35,26 @@ def word_neighbors(limit=10):
 
 @app.route('/api/phrase', methods=['GET'])
 def phrase_neighbors(limit=10):
-    if 's' in request.args and request.args['s'].strip():
-        s = request.args['s'].strip()
+    """Retrieve a list of phrase synonyms for the given query.
+    ---
+    parameters:
+      - name: q
+        in: query
+        type: string
+        required: true
+    responses:
+      200:
+        description: A list of neighboring phrases.
+    """
+    
+    if 'q' in request.args and request.args['q'].strip():
+        query = request.args['q'].strip()
     else:
-        e = 'Error: No s-field provided. Please specify a non-empty phrase.'
+        e = 'Error: No q-field provided. Please specify a non-empty phrase.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
 
     limit = int(request.args.get('limit', limit))
-    neighbors = app.sentence_neighbors.query(s, limit)
+    neighbors = app.sentence_neighbors.query(query, limit)
     if neighbors:
         neighbors = [
             {
@@ -52,15 +68,27 @@ def phrase_neighbors(limit=10):
 
 @app.route('/api/concordance', methods=['GET'])
 def concordance(limit=5):
-    if 'w' in request.args and request.args['w'].strip():
-        w = request.args['w'].strip()
+    """Retrieve a list of related sentences for the given query.
+    ---
+    parameters:
+      - name: q
+        in: query
+        type: string
+        required: true
+    responses:
+      200:
+        description: A list of related sentences.
+    """
+    
+    if 'q' in request.args and request.args['q'].strip():
+        query = request.args['q'].strip()
     else:
         e = 'Error: No w-field provided. Please specify a non-empty word.'
         return jsonify({'status': 'fail', 'message': e, 'code': 500})
 
     limit = int(request.args.get('limit', limit))
 
-    hits, snippets, total = query_index('echoes-texts', w, limit=limit)
+    hits, snippets, total = query_index('echoes-texts', query, limit=limit)
     return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
 
 
