@@ -15,9 +15,25 @@ def word_neighbors():
         in: query
         type: string
         required: true
+      - name: limit
+        in: query
+        type: int
+        default: 10
     responses:
       200:
         description: A list of neighboring words
+        schema:
+          properties:
+            results:
+              type: array
+              items:
+                properties:
+                  word:
+                    type: string
+                  sim:
+                    type: string
+            status:
+              type: string
     """
 
     if 'q' in request.args and request.args['q'].strip():
@@ -42,9 +58,25 @@ def phrase_neighbors(limit=10):
         in: query
         type: string
         required: true
+      - name: limit
+        in: query
+        type: int
+        default: 10
     responses:
       200:
         description: A list of neighboring phrases.
+        schema:
+          properties:
+            results:
+              type: array
+              items:
+                properties:
+                  word:
+                    type: string
+                  distance:
+                    type: string
+            status:
+              type: string
     """
     
     if 'q' in request.args and request.args['q'].strip():
@@ -67,7 +99,7 @@ def phrase_neighbors(limit=10):
 
 
 @app.route('/api/concordance', methods=['GET'])
-def concordance(limit=5):
+def concordance():
     """Retrieve a list of related sentences for the given query.
     ---
     parameters:
@@ -75,6 +107,10 @@ def concordance(limit=5):
         in: query
         type: string
         required: true
+      - name: limit
+        in: query
+        type: int
+        default: 10
     responses:
       200:
         description: A list of related sentences.
@@ -91,10 +127,3 @@ def concordance(limit=5):
     hits, snippets, total = query_index('echoes-texts', query, limit=limit)
     return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
 
-
-@app.route('/api/sentence', methods=['GET'])
-def sentence():
-    document_id = int(request.args['did'])
-    sentence_id = int(request.args['sid'])
-    sentence = Text.query.get(document_id)
-    return jsonify({'sentence': sentence.get(sentence_id)})
