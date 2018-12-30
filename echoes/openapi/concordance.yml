@@ -4,10 +4,12 @@ parameters:
   - name: q
     in: query
     type: string
+    description: Query the index for this word or string
     required: true
   - name: limit
     in: query
     type: int
+    description: Maximum number of results returned
     default: 10
 responses:
   200:

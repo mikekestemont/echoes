@@ -4,10 +4,12 @@ parameters:
   - name: q
     in: query
     type: string
+    description: Query neighboring sentences or phrases
     required: true
   - name: limit
     in: query
     type: int
+    description: Maximum number of neighbors returned
     default: 10
 responses:
   200:

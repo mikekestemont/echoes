@@ -4,10 +4,12 @@ parameters:
   - name: q
     in: query
     type: string
+    description: Query neighbors for the given word
     required: true
   - name: limit
     in: query
     type: int
+    description: Maximum number of returned results
     default: 10
 responses:
   200:
