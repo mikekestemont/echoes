@@ -1,0 +1,29 @@
+Retrieve a list of synonyms for the given word.
+---
+parameters:
+  - name: q
+    in: query
+    type: string
+    description: Query neighbors for the given word
+    required: true
+  - name: limit
+    in: query
+    type: int
+    description: Maximum number of returned results
+    default: 10
+responses:
+  200:
+    description: A list of neighboring words
+    schema:
+      properties:
+        results:
+          type: array
+          items:
+            properties:
+              word:
+                type: string
+              sim:
+                type: string
+        status:
+          type: string
+

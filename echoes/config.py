@@ -18,3 +18,6 @@ class Config:
     # Elasticsearch settings
     NUMBER_OF_FRAGMENTS = 5
     FRAGMENT_SIZE = 100
+
+    # Swagger
+    SWAGGER = {'title': 'Echoes API'}
