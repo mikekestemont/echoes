@@ -1,0 +1,14 @@
+Retrieve a list of related sentences for the given query.
+---
+parameters:
+  - name: q
+    in: query
+    type: string
+    required: true
+  - name: limit
+    in: query
+    type: int
+    default: 10
+responses:
+  200:
+    description: A list of related sentences.

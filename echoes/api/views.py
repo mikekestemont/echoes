@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flasgger import swag_from
 
 from .search import query_index
 from .models import Text
@@ -7,35 +8,8 @@ from . import app
 
 
 @app.route('/api/word', methods=['GET'])
+@swag_from('../openapi/word.yml')
 def word_neighbors():
-    """Retrieve a list of synonyms for the given word.
-    ---
-    parameters:
-      - name: q
-        in: query
-        type: string
-        required: true
-      - name: limit
-        in: query
-        type: int
-        default: 10
-    responses:
-      200:
-        description: A list of neighboring words
-        schema:
-          properties:
-            results:
-              type: array
-              items:
-                properties:
-                  word:
-                    type: string
-                  sim:
-                    type: string
-            status:
-              type: string
-    """
-
     if 'q' in request.args and request.args['q'].strip():
         query = request.args['q'].strip()
     else:
@@ -50,35 +24,8 @@ def word_neighbors():
 
 
 @app.route('/api/phrase', methods=['GET'])
+@swag_from('../openapi/phrase.yml')
 def phrase_neighbors(limit=10):
-    """Retrieve a list of phrase synonyms for the given query.
-    ---
-    parameters:
-      - name: q
-        in: query
-        type: string
-        required: true
-      - name: limit
-        in: query
-        type: int
-        default: 10
-    responses:
-      200:
-        description: A list of neighboring phrases.
-        schema:
-          properties:
-            results:
-              type: array
-              items:
-                properties:
-                  word:
-                    type: string
-                  distance:
-                    type: string
-            status:
-              type: string
-    """
-    
     if 'q' in request.args and request.args['q'].strip():
         query = request.args['q'].strip()
     else:
@@ -99,23 +46,8 @@ def phrase_neighbors(limit=10):
 
 
 @app.route('/api/concordance', methods=['GET'])
-def concordance():
-    """Retrieve a list of related sentences for the given query.
-    ---
-    parameters:
-      - name: q
-        in: query
-        type: string
-        required: true
-      - name: limit
-        in: query
-        type: int
-        default: 10
-    responses:
-      200:
-        description: A list of related sentences.
-    """
-    
+@swag_from('../openapi/concordance.yml')
+def concordance():    
     if 'q' in request.args and request.args['q'].strip():
         query = request.args['q'].strip()
     else:
