@@ -36,9 +36,6 @@ class Vocabulary:
         self.idx2char = {i: s for s, i in self.char2idx.items()}
         return self
 
-    def fit_transform(self, tokens):
-        return self.fit(tokens).transform(tokens)
-
     def dump(self, path):
         with open(path, 'w') as f:
             json.dump(
