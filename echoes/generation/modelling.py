@@ -21,7 +21,7 @@ def repackage_hidden(h):
 class LM(nn.Module):
     """Container module with an encoder, a recurrent module, and a decoder."""
 
-    def __init__(self, vocab, layers, emb_dim, bptt, modelname,
+    def __init__(self, vocab, layers, emb_dim, bptt, modelname, model_dir,
                  hidden_dim, cond_dim, tie_weights=False, dropout=0.5):
         super(LM, self).__init__()
         self.vocab_size = len(vocab.char2idx)
@@ -33,6 +33,7 @@ class LM(nn.Module):
         self.hidden_dim = hidden_dim
         self.cond_dim = cond_dim
         self.tie_weights = tie_weights
+        self.model_dir = model_dir
         
         self.encoder = nn.Embedding(self.vocab_size, self.emb_dim)
         self.rnn = nn.RNN(emb_dim, hidden_dim, layers, dropout=dropout)
@@ -134,7 +135,7 @@ class LM(nn.Module):
                 print('-' * 89)
 
                 if not best_val_loss or val_loss < best_val_loss:
-                    with open(self.modelname + '.pt', 'wb') as f:
+                    with open(f'{self.model_dir}/lm.pt', 'wb') as f:
                         torch.save(self, f)
                     print('>>> saving model')    
                     best_val_loss = val_loss
