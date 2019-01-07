@@ -1,4 +1,6 @@
 import argparse
+import shutil
+import os
 
 import torch
 
@@ -9,7 +11,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # data
-    parser.add_argument('--split_dir', type=str, default='/Users/mike/GitRepos/echoes/data/lm_splits')
+    parser.add_argument('--split_dir', type=str, default='/Users/mikekestemont/GitRepos/echoes/data/lm_splits')
     parser.add_argument('--conds')
     parser.add_argument('--bptt', type=int, default=30)
     parser.add_argument('--min_cnt', type=int, default=100)
@@ -37,10 +39,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(args)
 
+    try:
+        shutil.rmtree(args.model_path)
+    except FileNotFoundError:
+        pass
+    os.mkdir(args.model_path)
+
     device = torch.device('cuda' if args.cuda else 'cpu')
 
     vocab = Vocabulary(min_cnt=args.min_cnt)
     vocab.fit(lines_from_jsonl(f'{args.split_dir}/train.jsonl'))
+    vocab.dump(f'{args.model_path}/vocab.json')
     
     conds = None
     if args.conds:
@@ -56,6 +65,7 @@ if __name__ == '__main__':
     print("Building model")
     lm = LM(vocab=vocab, layers=args.layers, emb_dim=args.emb_dim,
             bptt=args.bptt, hidden_dim=args.hidden_dim,
+            model_dir=args.model_path,
             cond_dim=args.cond_dim, tie_weights=args.tie_weights,
             dropout=args.dropout, modelname='XXX')
     print(lm)
