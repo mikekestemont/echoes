@@ -8,10 +8,10 @@ from sklearn.model_selection import train_test_split as split
 def main():
     parser = argparse.ArgumentParser(description='Splits available data in train vs dev')
     parser.add_argument('--input_file', type=str,
-                        default='/Users/mike/GitRepos/echoes/data/corpus.jsonl',
+                        default='/Users/mikekestemont/GitRepos/echoes/data/corpus.jsonl',
                         help='location of the full data file')
     parser.add_argument('--split_dir', type=str,
-                        default='/Users/mike/GitRepos/echoes/data/lm_splits',
+                        default='/Users/mikekestemont/GitRepos/echoes/data/lm_splits',
                         help='location of the train-dev files')
     parser.add_argument('--train_prop', type=float,
                         default=.8,
