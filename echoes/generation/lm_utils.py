@@ -30,7 +30,10 @@ class Vocabulary:
                  idx2char =  None):
         self.min_cnt = min_cnt
         self.char2idx = char2idx if char2idx is not None else {}
-        self.idx2char = idx2char if idx2char is not None else {}
+        if idx2char is not None:
+            self.idx2char = {int(k):v for k, v in idx2char.items()}
+        else:
+            self.idx2char = {}
         self.fitted = len(self.char2idx) > 0
 
     def fit(self, lines):
@@ -54,7 +57,7 @@ class Vocabulary:
             json.dump(
                 {
                     'min_cnt': self.min_cnt,
-                    'idx2char': self.char2idx,
+                    'idx2char': self.idx2char,
                     'char2idx': self.char2idx
                 },
                 f, indent=4)
