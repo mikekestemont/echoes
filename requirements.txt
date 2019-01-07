@@ -9,3 +9,14 @@ sqlalchemy==1.2.15
 syntok==1.0.2
 unidecode==1.0.23
 xlrd==1.2.0
+syntok
+faiss-cpu
+tqdm
+xlrd
+elastisearch
+flask
+flask_sqlalchemy
+flasgger
+gensim
+unidecode
+scikit-learn
