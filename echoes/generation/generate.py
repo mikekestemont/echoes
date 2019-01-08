@@ -46,7 +46,6 @@ def main():
         in_ = torch.t(char_idx)
         for idx, char in enumerate(char_idx.squeeze()):
             hypotheses[idx].append(vocab.idx2char[char.item()])
-    print('\n===')
 
     for hyp in hypotheses:
         print(''.join(hyp))
