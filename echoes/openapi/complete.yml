@@ -1,0 +1,26 @@
+Retrieve a list of related sentences for the given query.
+---
+parameters:
+  - name: q
+    in: query
+    type: string
+    description: Continue writing after this text
+    required: true
+  - name: limit
+    in: query
+    type: int
+    description: Maximum number of results returned
+    default: 10
+  - name: length
+    in: query
+    type: int
+    description: Maximum length of each hypothesis returned
+    default: 60
+  - name: temp
+    in: query
+    type: float
+    description: Temperature AKA creativity in completing
+    default: 0.35
+responses:
+  200:
+    description: A list of related sentences.
