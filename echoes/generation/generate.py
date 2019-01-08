@@ -32,9 +32,8 @@ def main():
             in_.fill_(ints[char_idx])
             _, hid_ = lm.forward(in_, hid_)
         in_.fill_(ints[-1])
+        hid_ = hid_.repeat((1, args.num, 1))
     
-    
-    hid_ = hid_.repeat((1, args.num, 1))
     in_ = in_.repeat((1, args.num))
     
     hypotheses = [[] for i in range(args.num)]
