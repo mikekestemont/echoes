@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('--conds')
     parser.add_argument('--bptt', type=int, default=30)
     parser.add_argument('--min_cnt', type=int, default=100)
-    parser.add_argument('--model_path', type=str, default='model_zoo')
+    parser.add_argument('--model_path', type=str, default='/Users/mikekestemont/GitRepos/echoes/data/lm')
 
     # model
     parser.add_argument('--emb_dim', type=int, default=100)

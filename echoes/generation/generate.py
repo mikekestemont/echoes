@@ -7,12 +7,14 @@ from modelling import LM
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default='model_zoo')
+    parser.add_argument('--model_path', type=str, default='/Users/mikekestemont/GitRepos/echoes/data/lm')
     parser.add_argument('--temperature', type=float, default=0.3,
                         help='initial learning rate')
     parser.add_argument('--seed', type=str, default='',
                         help='initial learning rate')
     parser.add_argument('--num', type=int, default=10,
+                        help='initial learning rate')
+    parser.add_argument('--length', type=int, default=60,
                         help='initial learning rate')
     parser.add_argument('--cuda', action='store_true', help='use CUDA')
     args = parser.parse_args()
@@ -38,7 +40,7 @@ def main():
     
     hypotheses = [[] for i in range(args.num)]
 
-    for i in range(100):
+    for i in range(args.length):
         output, hid_ = lm.forward(in_, hid_)
         char_weights = output.squeeze().div(args.temperature).exp().cpu()
         char_idx = torch.multinomial(char_weights, 1)

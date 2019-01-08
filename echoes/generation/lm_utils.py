@@ -89,7 +89,7 @@ class CorpusReader:
             chars = torch.LongTensor(self.vocab.transform(chars))
             chars = batchify(chars, batch_size)
 
-            for batch_idx, i in enumerate(range(0, chars.size(0) - 1, bptt)):
+            for i in range(0, chars.size(0) - 1, bptt):
                 source, target = get_batch(chars, i, bptt)
                 yield source, target
     
