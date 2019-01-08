@@ -63,7 +63,7 @@ def concordance(limit=5):
 @app.route('/api/complete', methods=['GET'])
 @swag_from('../openapi/complete.yml') # todo
 def complete(temp=.35, limit=5, length=60):    
-    if 'q' in request.args and request.args['s']:
+    if 'q' in request.args and request.args['q']:
         query = request.args['q']
     else:
         query = ''

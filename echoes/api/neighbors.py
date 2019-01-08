@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..")
+sys.path.append("../generation")
 
 import os
 import json
@@ -14,6 +14,7 @@ import faiss
 
 import torch
 from generation.lm_utils import Vocabulary
+from generation.modelling import LM
 
 from syntok.tokenizer import Tokenizer
 
@@ -56,10 +57,18 @@ class PhraseNeighbors:
         return [(self.faiss_lookup[i], d) for i, d in zip(indices[0], distances[0])]
 
 class Completer:
-    def __init__(self, model_dir, cuda=False):
+    def __init__(self, model_dir, layers=1, emb_dim=100, bptt=30,
+                 cond_dim=50, hidden_dim=250, modelname='XXX',
+                 cuda=False):
         self.device = torch.device('cuda' if cuda else 'cpu')
         self.vocab = Vocabulary.load(f'{model_dir}/vocab.json')
-        self.lm = torch.load(f'{model_dir}/lm.pt').to(self.device)
+        self.device = torch.device('cuda' if cuda else 'cpu')
+        self.lm = LM(vocab=self.vocab, layers=layers, emb_dim=emb_dim,
+            bptt=bptt, modelname='XXX', hidden_dim=hidden_dim,
+            cond_dim=cond_dim, model_dir=model_dir)
+        self.lm.load_state_dict(torch.load(f'{model_dir}/lm.pt'))
+        self.lm = self.lm.to(self.device)
+        self.lm.eval()
 
     def query(self, s, num_alternatives=5, sugg_len=60, temp=.35):
         in_ = torch.randint(len(self.vocab.idx2char), (1, 1), dtype=torch.long)

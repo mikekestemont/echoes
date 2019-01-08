@@ -136,7 +136,7 @@ class LM(nn.Module):
 
                 if not best_val_loss or val_loss < best_val_loss:
                     with open(f'{self.model_dir}/lm.pt', 'wb') as f:
-                        torch.save(self, f)
+                        torch.save(self.state_dict(), f)
                     print('>>> saving model')    
                     best_val_loss = val_loss
                 elif val_loss >= best_val_loss:

@@ -17,13 +17,28 @@ def main():
     parser.add_argument('--length', type=int, default=60,
                         help='initial learning rate')
     parser.add_argument('--cuda', action='store_true', help='use CUDA')
+
+    parser.add_argument('--emb_dim', type=int, default=100)
+    parser.add_argument('--cond_dim', type=int, default=50)
+    parser.add_argument('--hidden_dim', type=int, default=250)
+    parser.add_argument('--layers', type=int, default=1)
+    parser.add_argument('--tie_weights', action='store_true')
+    parser.add_argument('--dropout', type=float, default=0.2)
+    parser.add_argument('--bptt', type=int, default=30)
+
     args = parser.parse_args()
     print(args)
     
     device = torch.device('cuda' if args.cuda else 'cpu')
 
     vocab = Vocabulary.load(f'{args.model_path}/vocab.json')
-    lm = torch.load(f'{args.model_path}/lm.pt').to(device)
+
+    lm = LM(vocab=vocab, layers=args.layers, emb_dim=args.emb_dim,
+            bptt=args.bptt, modelname='XXX', hidden_dim=args.hidden_dim,
+            cond_dim=args.cond_dim, model_dir=args.model_path)
+    lm.load_state_dict(torch.load(f'{args.model_path}/lm.pt'))
+    lm = lm.to(device)
+    lm.eval()
 
     in_ = torch.randint(len(vocab.idx2char), (1, 1), dtype=torch.long).to(device)
     hid_ = None
