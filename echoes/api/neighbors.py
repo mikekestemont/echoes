@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..")
+
 import os
 import json
 
@@ -10,7 +13,7 @@ from elmoformanylangs import Embedder
 import faiss
 
 import torch
-from .. generation.lm_utils import vocabulary
+from generation.lm_utils import Vocabulary
 
 from syntok.tokenizer import Tokenizer
 
