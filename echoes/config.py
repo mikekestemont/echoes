@@ -6,6 +6,7 @@ class Config:
     # data and models paths
     DATA_DIR = os.path.join(basedir, '../data')
     MODEL_DIR = os.path.join(basedir, '../data/word_models')
+    LM_DIR = os.path.join(basedir, '../data/lm')
     CORPUS_DIR = os.path.join(basedir, '../data/corpus')
 
     CORPUS_FILE = os.path.join(basedir, '../data/corpus.jsonl')

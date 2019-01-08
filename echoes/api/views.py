@@ -47,7 +47,7 @@ def phrase_neighbors(limit=10):
 
 @app.route('/api/concordance', methods=['GET'])
 @swag_from('../openapi/concordance.yml')
-def concordance():    
+def concordance(limit=5):    
     if 'q' in request.args and request.args['q'].strip():
         query = request.args['q'].strip()
     else:
@@ -58,4 +58,21 @@ def concordance():
 
     hits, snippets, total = query_index('echoes-texts', query, limit=limit)
     return jsonify({'hits': hits, 'snippets': snippets, 'total': total})
+
+
+@app.route('/api/complete', methods=['GET'])
+@swag_from('../openapi/complete.yml') # todo
+def complete(temp=.35, limit=5, length=60):    
+    if 'q' in request.args and request.args['s']:
+        query = request.args['q']
+    else:
+        query = ''
+
+    limit = int(request.args.get('limit', 5))
+    length = int(request.args.get('length', length))
+    temp = float(request.args.get('temp', temp))
+
+    hypotheses = app.completer.query(query, num_alternatives=limit,
+                                     sugg_len=length, temp=temp)
+    return jsonify({'hypotheses': hypotheses})
 
